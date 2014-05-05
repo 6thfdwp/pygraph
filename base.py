@@ -17,8 +17,10 @@ class Vertex:
             return self.label
         elif key == 'predecessor':
             return self.predecessor
-        elif key == 'status':
-            return self.status
+        elif key == 'dtime':
+            return self.dtime
+        elif key == 'ftime':
+            return self.ftime
 
     def __setitem__(self, key, value):
         if key == 'index':
@@ -27,8 +29,10 @@ class Vertex:
             self.label = value
         elif key == 'predecessor':
             self.predecessor = value
-        elif key == 'status':
-            self.status = value
+        elif key == 'dtime':
+            self.dtime= value
+        elif key == 'ftime':
+            self.ftime = value
 
     def __hash__(self):
         return hash(self.index)
@@ -54,6 +58,14 @@ class Edge:
             return self.destination
         elif key == 'weight':
             return self.weight
+        elif key == 'type':
+            return self.type
+
+    def __setitem__(self, key, value):
+        if key == 'weight':
+            self.weight = value
+        elif key == 'type':
+            self.type = value
 
     def reverse(self):
         return Edge(self.destination, self.source, self.weight)
@@ -114,9 +126,6 @@ class GraphAdj:
             source = self.getVertex(sindex)
             dest = self.getVertex(dindex)
             newedge = Edge(source, dest, weight)
-            #if weight is not None:
-                #newedge.setWeight(weight)
-            # self.getVEntry(source).edges.append(newedge)
             return newedge
         except IndexError:
             print "vertex indext error"
@@ -155,6 +164,12 @@ class GraphAdj:
     # iterator for a vertex's out edges to explore its adjcent nodes
     def adjcent(self, u):
         return self.EdgeIter(u, self)
+
+    def path(self, dest):
+        pre = dest['predecessor']
+        if pre is None:
+            return [dest]
+        return self.path(pre) + [dest]
 
 if __name__ == '__main__':
     G = GraphAdj()

@@ -3,7 +3,7 @@ import os
 
 class UndirectedGraph(GraphAdj):
     def addEdge(self, sindex, dindex, weight):
-        #edge = GraphAdj.addEdge(self, weight, sindex=sindex, dindex=dindex)
+        #super(UndirectedGraph, self).addEdge(self, sindex, dindex, weight)
         edge = GraphAdj.addEdge(self, sindex, dindex, weight)
         self.getVEntry(edge['source']).edges.append(edge)
         self.getVEntry(edge['dest']).edges.append(edge.reverse())
@@ -12,6 +12,7 @@ class UndirectedGraph(GraphAdj):
 
 class DirectedGraph(GraphAdj):
     def addEdge(self, sindex, dindex, weight):
+        #super(DirectedGraph, self).addEdge(self, sindex, dindex, weight)
         edge = GraphAdj.addEdge(self, sindex, dindex, weight)
         self.getVEntry(edge['source']).edges.append(edge)
         return edge
