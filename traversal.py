@@ -6,14 +6,14 @@ from graph.priority_dict import *
 def bfs(G, s=None):
     if s is None:
         s = G.getVertex(0)
-    Q = [s] # discovered put in Q to be processed
+    Q = [s] # Q stores the discovered vertices but not further explored yet 
     while Q:
         v = Q.pop(0)
         yield v
         for e in G.adjcent(v):
             source, dest = e['source'], e['dest']
             # if it's start vertex or already discovered or processed 
-            # avoid putting one node in Q repeatedly 
+            # avoid putting this vertex in Q repeatedly 
             if dest == s or dest['predecessor']: 
                 continue
             Q.append(dest) # add new to be further explored
@@ -24,11 +24,10 @@ def dfs_norec(G, s=None):
     if s is None:
         s = G.getVertex(0)
 
-"""
-during dfs, identify edge type to check whether contains a cycle
-this process differs between undirected and directed
-"""
 def dfs(G, T, s=None):
+    """
+    Depath first traversal
+    """
     if s is None:
         s = G.getVertex(0)
     s['dtime'] = T; T += 1
@@ -47,8 +46,12 @@ def dfs(G, T, s=None):
     return T
 
 def dijkstra(G, s, d):
+    """ The single source shortest path on a non-negative weighted graph """
+
     # Q: key is vertex
     #    value is accumulated cost from 's' to the vertex
+    #    priority is the current cost of each vertex
+
     Q = priority_dict()
     Q[s] = 0.0 # the starting vertex has zero cost
     processed = []
@@ -64,9 +67,14 @@ def dijkstra(G, s, d):
             # if dest is already extracted from Q continue next
             if dest in processed:
                 continue
+            # put the newly discovered vertex in the Q initializing the cost as the maximum 
             Q.setdefault(dest, float('inf'))
             cost = value + e['weight'] # cost by following the edge 'e'
-            if cost < Q[dest]: # relax by updating the accumulated cost
+            if cost < Q[dest]: 
+                # the dest vertex could be some discovered but not popped from Q yet
+                # relax the 'dest' vertex by updating the accumulated cost
+                # the newly discovered is always updated
+
                 Q[dest] = cost
                 # there is a shorter path from u 
                 dest['predecessor'] = u
