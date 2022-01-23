@@ -133,14 +133,19 @@ class GraphAdj:
         for i, line in enumerate(f):
             items = line.split(' ')
             if i == 0:
+                # the first line contains all vertex label, add them all
+                # as graph ventry instances
                 for item in items:
                     self.addVertex(Vertex( item.strip() ))
                 continue
+            # from the second line representing connection 
+            sindex, dindex = items[0], items[1]
             try:
                 weight = float(items[2])
             except IndexError:
+                # no weight specified
                 weight = 1.0
-            sindex, dindex = items[0], items[1]
+
             self.addEdge(sindex, dindex, weight)
 
     def output(self):

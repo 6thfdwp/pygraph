@@ -8,7 +8,7 @@ def dfs_norec(G, s=None):
 
 def dfs(G, T, s=None):
     """
-    Depath first traversal
+    Depth first traversal
     """
     if s is None:
         s = G.getVertex(0)
@@ -34,6 +34,7 @@ def bfs(G, s=None):
     while Q:
         v = Q.pop(0)
         yield v
+        #visited.add(v)
         for e in G.adjcent(v):
             source, dest = e['source'], e['dest']
             # if it's start vertex or already discovered
@@ -73,9 +74,13 @@ def dijkstra(G, s, d):
             Q.setdefault(dest, float('inf'))
             cost = value + e['weight'] # cost by following the edge 'e'
             if cost < Q[dest]: 
-                # the dest vertex could be some discovered but not popped from Q yet
-                # relax the 'dest' vertex by updating the accumulated cost
-                # the newly discovered one is always updated
+                """
+                the dest vertex could be some discovered but not popped from Q yet
+                if visited before, relax the 'dest' cost by following the new lower cost edge
+                if not, it is newly discovered one, is always initialized with the current edge weight
+                and its predecessor's accumulated cost
+                """
+                 
 
                 Q[dest] = cost
                 # there is a shorter path from u 
@@ -83,11 +88,12 @@ def dijkstra(G, s, d):
 
 if __name__ == '__main__':
     conf = os.getcwd() + '/conf/' + sys.argv[1]
-    #conf = os.getcwd() + '/graph/graph1.txt'
-    #G = UndirectedGraph(conf)
+    # conf = os.getcwd() + '/graph/graph1.txt'
+    # G = UndirectedGraph(conf)
     G = DirectedGraph(conf)
     T = 1
-    dfs(G, T)
+    print dfs(G, T)
+    
     #for v in dfs_nonrec(G, G.getVertex(0)):
         #print v
     #for v in bfs(G):
